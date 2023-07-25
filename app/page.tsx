@@ -4,10 +4,10 @@ import { enableReactUse } from "@legendapp/state/config/enableReactUse";
 import EmptyTodo from "@/components/empty-todo";
 import TodoItem from "@/components/todo-item";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { For, Show, useObservable } from "@legendapp/state/react";
+import { For, Show, useObservable, Reactive } from "@legendapp/state/react";
 import type { Todo } from "./types/todo";
 import { Status } from "./types/todo";
+import { Input } from "@/components/ui/input";
 
 enableReactUse();
 
@@ -60,6 +60,7 @@ export default function Home() {
           value={input.use()}
           onChange={(event) => input.set(event.target.value)}
         />
+
         <Button onClick={handleSave}>Save</Button>
       </section>
 

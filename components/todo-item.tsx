@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import TodoStatus from "./todo-status";
 import { Status, Todo } from "@/app/types/todo";
 import { ObservablePrimitiveBaseFns } from "@legendapp/state";
+import { cn } from "@/lib/utils";
 
 export default function TodoItem({
   todo$,
@@ -15,7 +16,12 @@ export default function TodoItem({
 }) {
   const { id, status, text } = todo$.use() as Todo;
   return (
-    <Card className="w-full">
+    <Card
+      className={cn("w-full", {
+        "border-warning": status === Status.Progress,
+        "border-destructive": status === Status.Done,
+      })}
+    >
       <CardHeader>
         <CardTitle className="text-xl">{text}</CardTitle>
       </CardHeader>
