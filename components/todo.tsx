@@ -1,21 +1,16 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "./ui/button";
+import TodoStatus from "./todo-status";
 
 export default function Todo() {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-xl">Todo title</CardTitle>
       </CardHeader>
 
-      <CardFooter>
+      <CardFooter className="gap-2">
+        <TodoStatus />
         <Button size={"icon"} variant={"destructive"}>
           <svg
             fill="none"

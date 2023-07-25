@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen max-w-md mx-auto bg-muted">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

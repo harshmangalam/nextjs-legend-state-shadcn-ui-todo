@@ -8,12 +8,12 @@ import {
 
 export default function TodoStatus() {
   return (
-    <Select>
+    <Select defaultValue="init">
       <SelectTrigger>
         <SelectValue placeholder="Status" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="init">Init</SelectItem>
+        <SelectItem value="init">Initialized</SelectItem>
         <SelectItem value="progress">Progress</SelectItem>
         <SelectItem value="done">Done</SelectItem>
       </SelectContent>
