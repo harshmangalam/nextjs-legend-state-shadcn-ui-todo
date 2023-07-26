@@ -5,20 +5,21 @@ import EmptyTodo from "@/components/empty-todo";
 import TodoItem from "@/components/todo-item";
 import { Button } from "@/components/ui/button";
 import { For, Show, useObservable, Reactive } from "@legendapp/state/react";
-import type { Todo } from "./types/todo";
-import { Status } from "./types/todo";
+import { enableReactComponents } from "@legendapp/state/config/enableReactComponents";
+
+import type { Todo } from "../types/todo";
+import { Status } from "../types/todo";
 import { Input } from "@/components/ui/input";
+import { state } from "@/store/todo";
 
 enableReactUse();
+enableReactComponents();
 
 export default function Home() {
-  const { todos, input } = useObservable<{ todos: Todo[]; input: string }>({
-    todos: [],
-    input: "",
-  });
+  const input = useObservable("");
 
   const handleSave = () => {
-    todos.push({
+    state.todos.push({
       id: crypto.randomUUID(),
       status: Status.Initialized,
       text: input.get(),
@@ -26,23 +27,6 @@ export default function Home() {
     input.set("");
   };
 
-  const handleDeleteTodo = (id: string) => {
-    todos.set((todos) => todos.filter((todo) => todo.id !== id));
-  };
-
-  const handleUpdateStatus = (id: string, status: Status) => {
-    todos.set((todos) =>
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            status,
-          };
-        }
-        return todo;
-      })
-    );
-  };
   return (
     <div>
       <section className="flex flex-col gap-y-4 items-center max-w-lg mx-auto text-center">
@@ -57,27 +41,18 @@ export default function Home() {
           type="text"
           placeholder="Start typing..."
           autoFocus
-          value={input.use()}
-          onChange={(event) => input.set(event.target.value)}
+          $value={input}
         />
 
         <Button onClick={handleSave}>Save</Button>
       </section>
 
       <section className="mt-8 max-w-lg mx-auto">
-        <Show if={todos.length} else={<EmptyTodo />}>
-          <div className="flex flex-col gap-y-2">
-            <For each={todos}>
-              {(todo) => (
-                <TodoItem
-                  onUpdateStatus={handleUpdateStatus}
-                  todo$={todo}
-                  onDeleteTodo={handleDeleteTodo}
-                />
-              )}
-            </For>
-          </div>
-        </Show>
+        <div className="flex flex-col gap-y-2">
+          <For each={state.todos}>
+            {(todo) => <TodoItem todo={todo.get() as Todo} />}
+          </For>
+        </div>
       </section>
     </div>
   );

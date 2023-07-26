@@ -1,4 +1,4 @@
-import { Status } from "@/app/types/todo";
+import { Status } from "@/types/todo";
 import {
   Select,
   SelectContent,
@@ -6,21 +6,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { state } from "@/store/todo";
 
 export default function TodoStatus({
   id,
   status,
-  onUpdateStatus,
 }: {
   id: string;
   status: Status;
-  onUpdateStatus: (id: string, status: Status) => void;
 }) {
+  const handleChangeStatus = (status: Status) => {
+    state.todos.set((todos) =>
+      todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            status,
+          };
+        }
+        return todo;
+      })
+    );
+  };
   return (
     <Select
       defaultValue={Status.Initialized}
       value={status}
-      onValueChange={(v) => onUpdateStatus(id, v as Status)}
+      onValueChange={(v) => handleChangeStatus(v as Status)}
     >
       <SelectTrigger>
         <SelectValue placeholder="Status" />

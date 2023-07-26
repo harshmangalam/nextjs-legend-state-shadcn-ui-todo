@@ -1,37 +1,31 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import TodoStatus from "./todo-status";
-import { Status, Todo } from "@/app/types/todo";
-import { ObservablePrimitiveBaseFns } from "@legendapp/state";
+import { Status, Todo } from "@/types/todo";
 import { cn } from "@/lib/utils";
+import { state } from "@/store/todo";
 
-export default function TodoItem({
-  todo$,
-  onDeleteTodo,
-  onUpdateStatus,
-}: {
-  todo$: ObservablePrimitiveBaseFns<Todo | undefined>;
-  onDeleteTodo: (id: string) => void;
-  onUpdateStatus: (id: string, status: Status) => void;
-}) {
-  const { id, status, text } = todo$.use() as Todo;
+export default function TodoItem({ todo }: { todo: Todo }) {
+  const handleRemoveTodo = () => {
+    state.todos.set((todos) => todos.filter((t) => t.id !== todo?.id));
+  };
   return (
     <Card
       className={cn("w-full", {
-        "border-warning": status === Status.Progress,
-        "border-destructive": status === Status.Done,
+        "border-warning": todo.status === Status.Progress,
+        "border-destructive": todo.status === Status.Done,
       })}
     >
       <CardHeader>
-        <CardTitle className="text-xl">{text}</CardTitle>
+        <CardTitle className="text-xl">{todo.text}</CardTitle>
       </CardHeader>
 
       <CardFooter className="gap-2">
-        <TodoStatus id={id} status={status} onUpdateStatus={onUpdateStatus} />
+        <TodoStatus id={todo?.id} status={todo.status} />
         <Button
           size={"icon"}
           variant={"destructive"}
-          onClick={() => onDeleteTodo(id)}
+          onClick={handleRemoveTodo}
         >
           <svg
             fill="none"
